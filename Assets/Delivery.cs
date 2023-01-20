@@ -1,16 +1,16 @@
 using UnityEngine;
 
 public class Delivery : MonoBehaviour{
-    [SerializeField] private Color32 hasPackageColor = new Color32(1, 1, 1, 1);
-    [SerializeField] private Color32 noPackageColor = new Color32(1, 1, 1, 1);
+    [SerializeField] private Color32 hasPackageColor = new(1, 1, 1, 1);
+    [SerializeField] private Color32 noPackageColor = new(1, 1, 1, 1);
 
     [SerializeField] private float destroyDelay = 0.5f;
-    private bool _hasPackage;
+    private bool hasPackage;
 
-    private SpriteRenderer _spriteRenderer;
+    private SpriteRenderer spriteRenderer;
 
     private void Start(){
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void OnCollisionEnter2D(Collision2D other){
@@ -18,17 +18,16 @@ public class Delivery : MonoBehaviour{
     }
 
     private void OnTriggerEnter2D(Collider2D other){
-        if (other.CompareTag("Package") && !_hasPackage){
+        if (other.CompareTag("Package") && !hasPackage){
             Debug.Log("Package picked up");
-            _hasPackage = true;
-            _spriteRenderer.color = hasPackageColor;
+            hasPackage = true;
+            spriteRenderer.color = hasPackageColor;
             Destroy(other.gameObject, destroyDelay);
         }
-
-        if (other.CompareTag("Customer") && _hasPackage){
+        else if (other.CompareTag("Customer") && hasPackage){
             Debug.Log("Package Delivered");
-            _hasPackage = false;
-            _spriteRenderer.color = noPackageColor;
+            hasPackage = false;
+            spriteRenderer.color = noPackageColor;
         }
     }
 }
